@@ -1,9 +1,9 @@
-// REPLACE these placeholders with your Firebase project config (Step 2 will show how)
+// src/firebaseConfig.js
 export const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "SENDER_ID",
-  appId: "APP_ID"
-}
+  apiKey: "AIzaSyDAXmb1851DJrMtEieP82wpUWT8K4kjSHA",
+  authDomain: "rampurhat-one-web.firebaseapp.com",
+  projectId: "rampurhat-one-web",
+  storageBucket: "rampurhat-one-web.firebasestorage.app",
+  messagingSenderId: "47427192024",
+  appId: "1:47427192024:web:828851685b3c72173543ad"
+};
