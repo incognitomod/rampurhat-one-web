@@ -1,0 +1,12 @@
+{
+  "appTitle": "Rampurhat One",
+  "tagline": "Local services, delivery, transport — one place",
+  "createCustomer": "Create account as customer",
+  "createMerchant": "Create account as merchant",
+  "alreadyUser": "Already a user? Login",
+  "searchPlaceholder": "Search for services, shops...",
+  "home": "Home",
+  "orders": "Orders",
+  "wallet": "Wallet",
+  "profile": "Profile"
+}
