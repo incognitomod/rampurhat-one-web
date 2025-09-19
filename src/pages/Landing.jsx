@@ -2,7 +2,8 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { signInWithPopup } from 'firebase/auth'
-import { auth, provider } from '../firebase'
+import { auth, provider, db } from '../firebase'
+import { doc, getDoc } from 'firebase/firestore'
 
 export default function Landing() {
   const nav = useNavigate()
@@ -10,9 +11,18 @@ export default function Landing() {
 
   async function handleGoogleCustomer() {
     try {
-      await signInWithPopup(auth, provider)
-      // after auth, go to profile creation or feed
-      nav('/feed')
+      const result = await signInWithPopup(auth, provider)
+      const user = result.user
+      const userRef = doc(db, 'users', user.uid)
+      const userSnap = await getDoc(userRef)
+
+      if (!userSnap.exists()) {
+        // New user → redirect to profile creation
+        nav('/create-profile', { state: { uid: user.uid, email: user.email } })
+      } else {
+        // Existing user → go to feed
+        nav('/feed')
+      }
     } catch (err) {
       alert('Sign-in failed: ' + err.message)
     }
@@ -26,26 +36,34 @@ export default function Landing() {
           <p className="text-sm text-gray-400">{t('tagline')}</p>
         </div>
         <div className="flex gap-2">
-          <button onClick={() => i18n.changeLanguage(i18n.language === 'en' ? 'bn' : 'en')}
-            className="px-3 py-1 rounded-md border border-gray-700 text-sm">
+          <button
+            onClick={() => i18n.changeLanguage(i18n.language === 'en' ? 'bn' : 'en')}
+            className="px-3 py-1 rounded-md border border-gray-700 text-sm"
+          >
             {i18n.language === 'en' ? 'BN' : 'EN'}
           </button>
         </div>
       </header>
 
       <div className="mt-8 space-y-4">
-        <button onClick={handleGoogleCustomer}
-          className="w-full py-3 rounded-xl bg-teal-600 text-white font-semibold">
+        <button
+          onClick={handleGoogleCustomer}
+          className="w-full py-3 rounded-xl bg-teal-600 text-white font-semibold"
+        >
           {t('createCustomer')}
         </button>
 
-        <button onClick={() => nav('/merchant')}
-          className="w-full py-3 rounded-xl border border-gray-700 text-white font-semibold">
+        <button
+          onClick={() => nav('/merchant')}
+          className="w-full py-3 rounded-xl border border-gray-700 text-white font-semibold"
+        >
           {t('createMerchant')}
         </button>
 
-        <button onClick={() => nav('/profile')}
-          className="w-full py-2 rounded-xl text-sm text-gray-300">
+        <button
+          onClick={() => nav('/profile')}
+          className="w-full py-2 rounded-xl text-sm text-gray-300"
+        >
           {t('alreadyUser')}
         </button>
       </div>
