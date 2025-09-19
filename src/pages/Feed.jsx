@@ -1,43 +1,35 @@
-import React from 'react'
-import { useTranslation } from 'react-i18next'
+import React, { useEffect, useState } from 'react'
+import { db } from '../firebase'
+import { collection, getDocs } from 'firebase/firestore'
 
 export default function Feed() {
-  const { t } = useTranslation()
+  const [items, setItems] = useState([])
+
+  useEffect(() => {
+    async function fetchFeed() {
+      const snapshot = await getDocs(collection(db, 'feedItems'))
+      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+      setItems(data)
+    }
+    fetchFeed()
+  }, [])
 
   return (
     <div className="max-w-md mx-auto p-4">
-      <div className="flex items-center justify-between mb-4">
-        <div className="text-sm text-gray-300">Rampurhat, Birbhum</div>
-        <div className="flex items-center gap-2">
-          <button className="px-2 py-1 rounded-md border text-xs">EN/BN</button>
-          <button className="px-2 py-1 rounded-md border text-xs">🔔</button>
-        </div>
-      </div>
-
-      <div className="mb-4">
-        <input className="w-full search-input" placeholder={t('searchPlaceholder')} />
-      </div>
-
-      <div className="grid grid-cols-2 gap-3">
-        <div className="card">Food & Grocery</div>
-        <div className="card">Healthcare</div>
-        <div className="card">Home Services</div>
-        <div className="card">Education</div>
-      </div>
-
-      <h3 className="mt-6 mb-2 text-lg font-semibold">Transport</h3>
-      <div className="grid grid-cols-3 gap-2">
-        <div className="card text-center">Bike</div>
-        <div className="card text-center">Auto</div>
-        <div className="card text-center">Car</div>
-      </div>
-
-      <div className="mt-6">
-        <h3 className="text-lg font-semibold">Merchants near you</h3>
-        <div className="mt-3 space-y-3">
-          <div className="card">Atithi Family Restaurant — 4.2 ★ — 1.2km</div>
-          <div className="card">Local Grocery Mart — 3.9 ★ — 0.8km</div>
-        </div>
+      <h2 className="text-xl font-semibold mb-3">Feed</h2>
+      <div className="space-y-3">
+        {items.map(item => (
+          <div key={item.id} className="card flex justify-between items-center">
+            <div>
+              <div className="font-semibold">{item.title}</div>
+              <div className="text-sm text-gray-400">{item.category}</div>
+              <div className="text-teal-400 font-semibold">₹{item.price}</div>
+            </div>
+            {item.imageUrl && (
+              <img src={item.imageUrl} className="w-16 h-16 rounded" />
+            )}
+          </div>
+        ))}
       </div>
     </div>
   )
