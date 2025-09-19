@@ -6,6 +6,7 @@ import Orders from './pages/Orders'
 import Wallet from './pages/Wallet'
 import Profile from './pages/Profile'
 import Merchant from './pages/Merchant'
+import CreateProfile from './pages/CreateProfile'
 
 function BottomNav() {
   return (
@@ -31,6 +32,7 @@ export default function App() {
         <Route path="/wallet" element={<Wallet />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/merchant" element={<Merchant />} />
+        <Route path="/create-profile" element={<CreateProfile />} />
       </Routes>
 
       <BottomNav />
